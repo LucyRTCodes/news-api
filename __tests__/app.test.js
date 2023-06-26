@@ -30,3 +30,22 @@ describe("GET /api/topics", () => {
 			});
 	});
 });
+
+describe("GET /api/articles/:article_id", () => {
+	test("200: should return article which article_id matches the article_id provided in the URL", () => {
+		return request(app)
+			.get("/api/topics")
+			.expect(200)
+			.then(({ body }) => {
+				const { topics } = body;
+				expect(topics).toBeInstanceOf(Array);
+				expect(topics.length).toBe(3);
+				body.topics.forEach((topic) => {
+					expect(topic).toMatchObject({
+						slug: expect.any(String),
+						description: expect.any(String),
+					});
+				});
+			});
+	});
+});
