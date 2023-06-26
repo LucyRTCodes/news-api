@@ -18,6 +18,9 @@ describe("GET /api/topics", () => {
 			.get("/api/topics")
 			.expect(200)
 			.then(({ body }) => {
+				const { topics } = body;
+				expect(topics).toBeInstanceOf(Array);
+				expect(topics.length).toBe(3);
 				body.topics.forEach((topic) => {
 					expect(topic).toMatchObject({
 						slug: expect.any(String),
