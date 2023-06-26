@@ -50,4 +50,20 @@ describe("GET /api/articles/:article_id", () => {
 				});
 			});
 	});
+	test("400: should return not found when provided article_id is not valid", () => {
+		return request(app)
+			.get("/api/articles/three")
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("404: should return not found when provided article_id is valid but non-existent", () => {
+		return request(app)
+			.get("/api/articles/2000")
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
 });

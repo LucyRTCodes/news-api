@@ -1,13 +1,11 @@
 const { selectAllTopics, selectArticleById } = require("../models/app.models");
 
-exports.getAllTopics = (_, res) => {
+exports.getAllTopics = (_, res, next) => {
 	selectAllTopics()
 		.then((topics) => {
 			res.status(200).send({ topics });
 		})
-		.catch((err) => {
-			console.log(err);
-		});
+		.catch(next);
 };
 
 exports.getArticleById = (req, res, next) => {
