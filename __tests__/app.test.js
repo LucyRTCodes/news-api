@@ -3,6 +3,7 @@ const app = require("../app");
 const db = require("../db/connection");
 const data = require("../db/data/test-data/index");
 const seed = require("../db/seeds/seed");
+const endpointsJSON = require("../endpoints.json");
 
 beforeEach(() => {
 	return seed(data);
@@ -40,6 +41,7 @@ describe("GET /api/", () => {
 				const { endpoints } = body;
 				expect(endpoints).toBeInstanceOf(Object);
 				expect(Object.keys(endpoints).length).toBe(3);
+				expect(endpoints).toMatchObject(endpointsJSON);
 			});
 	});
 });
