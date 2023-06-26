@@ -11,7 +11,6 @@ exports.getAllTopics = (_, res, next) => {
 exports.getAllArticles = (_, res, next) => {
 	selectAllArticles()
 		.then((articles) => {
-			console.log(articles);
 			res.status(200).send({ articles });
 		})
 		.catch(next);

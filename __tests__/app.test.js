@@ -32,16 +32,16 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api/articles", () => {
-	xtest("200: should return all articles from articles table", () => {
+	test("200: should return all articles from articles table", () => {
 		return request(app)
 			.get("/api/articles")
 			.expect(200)
 			.then(({ body }) => {
 				const { articles } = body;
 				expect(articles).toBeInstanceOf(Array);
-				expect(topics.length).toBe(13);
-				body.topics.forEach((topic) => {
-					expect(topic).toMatchObject({
+				expect(articles.length).toBe(13);
+				body.articles.forEach((article) => {
+					expect(article).toMatchObject({
 						author: expect.any(String),
 						title: expect.any(String),
 						article_id: expect.any(Number),
@@ -49,7 +49,7 @@ describe("GET /api/articles", () => {
 						created_at: expect.any(String),
 						votes: expect.any(Number),
 						article_img_url: expect.any(String),
-						comment_count: expect.any(Number),
+						comment_count: expect.any(String),
 					});
 				});
 			});
