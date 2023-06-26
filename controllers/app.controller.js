@@ -1,11 +1,18 @@
-const { selectAllTopics } = require("../models/app.models");
+const { selectAllTopics, selectAllArticles } = require("../models/app.models");
 
-exports.getAllTopics = (_, res) => {
+exports.getAllTopics = (_, res, next) => {
 	selectAllTopics()
 		.then((topics) => {
 			res.status(200).send({ topics });
 		})
-		.catch((err) => {
-			console.log(err);
-		});
+		.catch(next);
+};
+
+exports.getAllArticles = (_, res, next) => {
+	selectAllArticles()
+		.then((articles) => {
+			console.log(articles);
+			res.status(200).send({ articles });
+		})
+		.catch(next);
 };
