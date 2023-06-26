@@ -4,7 +4,6 @@ exports.getAllTopics = (_, res) => {
 	console.log("controller");
 	selectAllTopics()
 		.then((topics) => {
-			console.log(topics);
 			res.status(200).send({ topics });
 		})
 		.catch((err) => {
