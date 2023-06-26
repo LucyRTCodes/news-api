@@ -1,4 +1,4 @@
-const { getAllEndpoints, selectAllTopics } = require("../models/app.models");
+const { selectAllTopics } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 
 exports.getApiEndpoints = (_, res) => {
