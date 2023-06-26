@@ -1,9 +1,8 @@
 const { getAllEndpoints, selectAllTopics } = require("../models/app.models");
+const endpoints = require("../endpoints.json");
 
 exports.getApiEndpoints = (_, res) => {
-	getAllEndpoints().then((endpoints) => {
-		res.status(200).send({ endpoints: JSON.parse(endpoints) });
-	});
+	res.status(200).send({ endpoints });
 };
 
 exports.getAllTopics = (_, res) => {
