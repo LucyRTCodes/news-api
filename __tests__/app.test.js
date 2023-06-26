@@ -34,17 +34,19 @@ describe("GET /api/topics", () => {
 describe("GET /api/articles/:article_id", () => {
 	test("200: should return article which article_id matches the article_id provided in the URL", () => {
 		return request(app)
-			.get("/api/topics")
+			.get("/api/articles/1")
 			.expect(200)
 			.then(({ body }) => {
-				const { topics } = body;
-				expect(topics).toBeInstanceOf(Array);
-				expect(topics.length).toBe(3);
-				body.topics.forEach((topic) => {
-					expect(topic).toMatchObject({
-						slug: expect.any(String),
-						description: expect.any(String),
-					});
+				const { article } = body;
+				expect(article).toMatchObject({
+					author: expect.any(String),
+					title: expect.any(String),
+					article_id: 1,
+					body: expect.any(String),
+					topic: expect.any(String),
+					created_at: expect.any(String),
+					votes: expect.any(Number),
+					article_img_url: expect.any(String),
 				});
 			});
 	});
