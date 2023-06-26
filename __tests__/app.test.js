@@ -30,3 +30,16 @@ describe("GET /api/topics", () => {
 			});
 	});
 });
+
+describe("GET /api/", () => {
+	test("200: should return all endpoints", () => {
+		return request(app)
+			.get("/api/")
+			.expect(200)
+			.then(({ body }) => {
+				const { endpoints } = body;
+				expect(endpoints).toBeInstanceOf(Object);
+				expect(Object.keys(endpoints).length).toBe(3);
+			});
+	});
+});
