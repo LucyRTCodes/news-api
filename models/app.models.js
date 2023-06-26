@@ -15,8 +15,6 @@ exports.selectAllArticles = () => {
 			GROUP BY articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url;`
 		)
 		.then(({ rows }) => {
-			console.log("I'm here!");
-			console.log(rows);
 			if (!rows.length)
 				return Promise.reject({ status: 404, msg: "Not found" });
 			return rows;
