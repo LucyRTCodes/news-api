@@ -2,6 +2,7 @@ const {
 	selectAllTopics,
 	selectAllArticles,
 	selectArticleById,
+	insertCommentById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 
@@ -24,11 +25,22 @@ exports.getAllArticles = (_, res, next) => {
 		})
 		.catch(next);
 };
+
 exports.getArticleById = (req, res, next) => {
 	const id = req.params.article_id;
 	selectArticleById(id)
 		.then((article) => {
 			res.status(200).send({ article: article[0] });
+		})
+		.catch(next);
+};
+
+exports.postCommentById = (req, res, next) => {
+	const id = req.params.article_id;
+	const comment = req.body;
+	insertCommentById(id, comment)
+		.then(() => {
+			res.status(201).send({ comment });
 		})
 		.catch(next);
 };

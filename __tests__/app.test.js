@@ -44,6 +44,7 @@ describe("GET /api/", () => {
 			});
 	});
 });
+
 describe("GET /api/articles", () => {
 	test("200: should return all articles from articles table", () => {
 		return request(app)
@@ -112,6 +113,32 @@ describe("GET /api/articles/:article_id", () => {
 			.expect(404)
 			.then(({ body }) => {
 				expect(body.msg).toBe("Not found");
+			});
+	});
+});
+
+describe("POST /api/articles/:article_id/comments", () => {
+	test("201: should add comment to relavent article", () => {
+		const newComment = { username: "rogersop", body: "Testing!" };
+		return request(app)
+			.post("/api/articles/1/comments")
+			.send(newComment)
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.comment).toMatchObject({
+					username: "rogersop",
+					body: "Testing!",
+				});
+			});
+	});
+	test("400: should return an error if passed invalid username", () => {
+		const newComment = { username: "rogersup", body: "Testing!" };
+		return request(app)
+			.post("/api/articles/1/comments")
+			.send(newComment)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
 			});
 	});
 });

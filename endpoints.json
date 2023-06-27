@@ -43,5 +43,13 @@
 				}
 			]
 		}
+	},
+	"POST /api/articles/:article_id/comments": {
+		"description": "takes an article_id and a comment and adds the comment to the article",
+		"queries": [],
+		"exampleRequest": { "username": "rogersop", "body": "example comment" },
+		"exampleResponse": {
+			"comment": { "username": "rogersop", "body": "example comment" }
+		}
 	}
 }
