@@ -67,3 +67,51 @@ describe("GET /api/articles/:article_id", () => {
 			});
 	});
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+	test("200: should return all comments for article specified by article_id", () => {
+		return request(app)
+			.get("/api/articles/1/comments")
+			.expect(200)
+			.then(({ body }) => {
+				const { comments } = body;
+				expect(comments).toBeInstanceOf(Array);
+				expect(comments).toHaveLength(11);
+			});
+	});
+	test("200: should return all comments with comment_id, votes,created_at, author, body, article_id", () => {
+		return request(app)
+			.get("/api/articles/1/comments")
+			.expect(200)
+			.then(({ body }) => {
+				const { comments } = body;
+				expect(comments).toBeSortedBy("created_at", { descending: true });
+				comments.forEach((comment) => {
+					expect(comment).toMatchObject({
+						comment_id: expect.any(Number),
+						votes: expect.any(Number),
+						created_at: expect.any(String),
+						author: expect.any(String),
+						body: expect.any(String),
+						article_id: 1,
+					});
+				});
+			});
+	});
+	test("400: should return not found when provided article_id is not valid", () => {
+		return request(app)
+			.get("/api/articles/three/comments")
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("404: should return not found when provided article_id is valid but non-existent", () => {
+		return request(app)
+			.get("/api/articles/2000/comments")
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
+});
