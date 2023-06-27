@@ -146,6 +146,15 @@ describe("GET /api/articles/:article_id/comments", () => {
 				});
 			});
 	});
+	test("200: should return an empty array if no comments for associated article", () => {
+		return request(app)
+			.get("/api/articles/2/comments")
+			.expect(200)
+			.then(({ body }) => {
+				const { comments } = body;
+				expect(comments).toEqual([]);
+			});
+	});
 	test("400: should return not found when provided article_id is not valid", () => {
 		return request(app)
 			.get("/api/articles/three/comments")
