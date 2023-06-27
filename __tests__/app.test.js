@@ -40,7 +40,7 @@ describe("GET /api/articles", () => {
 				const { articles } = body;
 				expect(articles).toBeInstanceOf(Array);
 				expect(articles.length).toBe(13);
-				//expect(articles).toBeSorted({ descending: true });
+				expect(articles).toBeSortedBy("created_at", { descending: true });
 				body.articles.forEach((article) => {
 					expect(article).toMatchObject({
 						author: expect.any(String),
