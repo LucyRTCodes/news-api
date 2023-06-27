@@ -50,7 +50,8 @@ exports.getCommentsById = (req, res, next) => {
 exports.postCommentById = (req, res, next) => {
 	const id = req.params.article_id;
 	const comment = req.body;
-	insertCommentById(id, comment)
+	const promises = [checkExists(id), insertCommentById(id, comment)];
+	Promise.all(promises)
 		.then(() => {
 			res.status(201).send({ comment });
 		})

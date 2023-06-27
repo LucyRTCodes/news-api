@@ -188,6 +188,23 @@ describe("POST /api/articles/:article_id/comments", () => {
 				});
 			});
 	});
+	test("201: should ignore additional properties", () => {
+		const newComment = {
+			username: "rogersop",
+			body: "Testing!",
+			comment_name: "test comment",
+		};
+		return request(app)
+			.post("/api/articles/1/comments")
+			.send(newComment)
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.comment).toMatchObject({
+					username: "rogersop",
+					body: "Testing!",
+				});
+			});
+	});
 	test("400: should return an error if passed invalid username", () => {
 		const newComment = { username: "rogersup", body: "Testing!" };
 		return request(app)
@@ -198,4 +215,37 @@ describe("POST /api/articles/:article_id/comments", () => {
 				expect(body.msg).toBe("Bad request");
 			});
 	});
+	test("400: should return not found when provided article_id is not valid", () => {
+		const newComment = { username: "rogersup", body: "Testing!" };
+		return request(app)
+			.post("/api/articles/three/comments")
+			.send(newComment)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("400: should return bad request when provided body is missing properties", () => {
+		const newComment = { username: "rogersup" };
+		return request(app)
+			.post("/api/articles/1/comments")
+			.send(newComment)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("404: should return not found when provided article_id is valid but non-existent", () => {
+		const newComment = { username: "rogersup", body: "Testing!" };
+		return request(app)
+			.post("/api/articles/2000/comments")
+			.send(newComment)
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
 });
+
+// What should happen if the user gives extra properties in newComment?
+// - they just won't be used? Should provide error message?
