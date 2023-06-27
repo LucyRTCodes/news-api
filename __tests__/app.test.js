@@ -246,6 +246,3 @@ describe("POST /api/articles/:article_id/comments", () => {
 			});
 	});
 });
-
-// What should happen if the user gives extra properties in newComment?
-// - they just won't be used? Should provide error message?
