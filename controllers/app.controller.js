@@ -1,10 +1,10 @@
 const {
+	checkExists,
 	selectAllTopics,
 	selectAllArticles,
 	selectArticleById,
-	insertCommentById,
 	selectCommentsById,
-	checkExists,
+	insertCommentById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 
