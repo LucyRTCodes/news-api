@@ -53,4 +53,16 @@ exports.selectCommentsById = (id) => {
 		});
 };
 
-exports.updateArticleById = (id) => {};
+exports.updateArticleById = (inc_votes, id) => {
+	return db
+		.query(
+			`UPDATE articles
+			SET votes = votes + $1
+			WHERE article_id = $2
+			RETURNING *`,
+			[inc_votes, id]
+		)
+		.then(({ rows }) => {
+			return rows;
+		});
+};

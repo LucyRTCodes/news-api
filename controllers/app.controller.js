@@ -47,5 +47,11 @@ exports.getCommentsById = (req, res, next) => {
 };
 
 exports.patchArticleById = (req, res, next) => {
-	updateArticleById(id);
+	const id = req.params.article_id;
+	const { inc_votes } = req.body;
+	updateArticleById(inc_votes, id)
+		.then((article) => {
+			res.status(200).send({ article: article[0] });
+		})
+		.catch(next);
 };
