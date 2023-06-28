@@ -52,12 +52,12 @@ exports.selectCommentsById = (id) => {
 		});
 };
 
-exports.insertCommentById = (id, comment) => {
+exports.insertCommentById = (article_id, comment) => {
 	const { username, body } = comment;
 	return db
 		.query(
 			`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`,
-			[username, body, id]
+			[username, body, article_id]
 		)
 		.then(({ rows }) => {
 			return rows;

@@ -183,7 +183,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 			.expect(201)
 			.then(({ body }) => {
 				expect(body.comment).toMatchObject({
-					article_id: expect.any(Number),
+					article_id: 1,
 					author: "rogersop",
 					body: "Testing!",
 					comment_id: expect.any(Number),
@@ -204,7 +204,7 @@ describe("POST /api/articles/:article_id/comments", () => {
 			.expect(201)
 			.then(({ body }) => {
 				expect(body.comment).toMatchObject({
-					article_id: expect.any(Number),
+					article_id: 1,
 					author: "rogersop",
 					body: "Testing!",
 					comment_id: expect.any(Number),
