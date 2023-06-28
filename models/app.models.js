@@ -54,8 +54,12 @@ exports.selectCommentsById = (id) => {
 
 exports.insertCommentById = (id, comment) => {
 	const { username, body } = comment;
-	return db.query(
-		`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3)`,
-		[username, body, id]
-	);
+	return db
+		.query(
+			`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`,
+			[username, body, id]
+		)
+		.then(({ rows }) => {
+			return rows;
+		});
 };

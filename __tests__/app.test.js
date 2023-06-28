@@ -183,8 +183,12 @@ describe("POST /api/articles/:article_id/comments", () => {
 			.expect(201)
 			.then(({ body }) => {
 				expect(body.comment).toMatchObject({
-					username: "rogersop",
+					article_id: expect.any(Number),
+					author: "rogersop",
 					body: "Testing!",
+					comment_id: expect.any(Number),
+					created_at: expect.any(String),
+					votes: expect.any(Number),
 				});
 			});
 	});
@@ -200,8 +204,12 @@ describe("POST /api/articles/:article_id/comments", () => {
 			.expect(201)
 			.then(({ body }) => {
 				expect(body.comment).toMatchObject({
-					username: "rogersop",
+					article_id: expect.any(Number),
+					author: "rogersop",
 					body: "Testing!",
+					comment_id: expect.any(Number),
+					created_at: expect.any(String),
+					votes: expect.any(Number),
 				});
 			});
 	});
@@ -235,14 +243,24 @@ describe("POST /api/articles/:article_id/comments", () => {
 				expect(body.msg).toBe("Bad request");
 			});
 	});
-	test("404: should return not found when provided article_id is valid but non-existent", () => {
+	test("400: should return bad request when provided article_id is non-existent", () => {
 		const newComment = { username: "rogersup", body: "Testing!" };
 		return request(app)
 			.post("/api/articles/2000/comments")
 			.send(newComment)
-			.expect(404)
+			.expect(400)
 			.then(({ body }) => {
-				expect(body.msg).toBe("Not found");
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("400: should return bad request when provided username is invalid", () => {
+		const newComment = { username: 3, body: "Testing!" };
+		return request(app)
+			.post("/api/articles/2000/comments")
+			.send(newComment)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
 			});
 	});
 });
