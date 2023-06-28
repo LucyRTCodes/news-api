@@ -56,3 +56,14 @@ exports.postCommentById = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+//Promise.all(checkExists(article_id), insertCommentById(article_id, comment))
+//-if non-existent article_id, both will return different errors to the catch block
+
+//checkExists(article_id)
+//.then(() => {insertCommentById(article_id, comment)})
+//completely breaks everything
+
+//checkExists(article_id)
+//.then(insertCommentById(article_id, comment))
+// also breaks all tests
