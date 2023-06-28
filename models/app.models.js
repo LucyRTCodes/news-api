@@ -31,6 +31,7 @@ exports.selectAllArticles = () => {
 			return rows;
 		});
 };
+
 exports.selectArticleById = (id) => {
 	return db
 		.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
@@ -51,3 +52,5 @@ exports.selectCommentsById = (id) => {
 			return rows;
 		});
 };
+
+exports.updateArticleById = (id) => {};

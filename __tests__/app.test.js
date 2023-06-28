@@ -44,6 +44,7 @@ describe("GET /api/", () => {
 			});
 	});
 });
+
 describe("GET /api/articles", () => {
 	test("200: should return all articles from articles table", () => {
 		return request(app)

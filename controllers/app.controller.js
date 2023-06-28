@@ -4,6 +4,7 @@ const {
 	selectArticleById,
 	selectCommentsById,
 	checkExists,
+	updateArticleById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 
@@ -43,4 +44,8 @@ exports.getCommentsById = (req, res, next) => {
 			res.status(200).send({ comments: comments[0] });
 		})
 		.catch(next);
+};
+
+exports.patchArticleById = (req, res, next) => {
+	updateArticleById(id);
 };
