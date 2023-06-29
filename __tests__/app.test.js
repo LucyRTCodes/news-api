@@ -345,4 +345,20 @@ describe("DELETE /api/comments/:comment_id", () => {
 				expect(body).toMatchObject({});
 			});
 	});
+	test("404: should return not found if comment_id not found", () => {
+		return request(app)
+			.delete("/api/comments/10000")
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
+	test("400: should return bad request if comment_id not valid", () => {
+		return request(app)
+			.delete("/api/comments/ten")
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
 });

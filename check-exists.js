@@ -9,7 +9,6 @@ exports.checkArticles = (article_id) => {
 			[article_id]
 		)
 		.then(({ rows }) => {
-			console.log(rows);
 			if (!rows.length)
 				return Promise.reject({ status: 404, msg: "Not found" });
 			return rows;
@@ -17,10 +16,16 @@ exports.checkArticles = (article_id) => {
 };
 
 exports.checkComments = (comment_id) => {
-	return db.query(
-		`SELECT * 
+	return db
+		.query(
+			`SELECT * 
 			FROM articles 
 			WHERE article_id = $1`,
-		[comment_id]
-	);
+			[comment_id]
+		)
+		.then(({ rows }) => {
+			if (!rows.length)
+				return Promise.reject({ status: 404, msg: "Not found" });
+			return rows;
+		});
 };
