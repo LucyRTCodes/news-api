@@ -10,7 +10,7 @@ https://lucy-nc-news.onrender.com
 Install dependencies:  
 -- npm i
 
-.env files needed :
+.env files needed :  
 .development with PGPDATABASE=nc_news  
 .test with PGPDATABASE=nc_news_test
 
