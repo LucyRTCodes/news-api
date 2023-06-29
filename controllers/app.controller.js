@@ -1,9 +1,10 @@
 const {
+	checkExists,
 	selectAllTopics,
 	selectAllArticles,
 	selectArticleById,
 	selectCommentsById,
-	checkExists,
+	insertCommentById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 
@@ -26,6 +27,7 @@ exports.getAllArticles = (_, res, next) => {
 		})
 		.catch(next);
 };
+
 exports.getArticleById = (req, res, next) => {
 	const id = req.params.article_id;
 	selectArticleById(id)
@@ -44,3 +46,27 @@ exports.getCommentsById = (req, res, next) => {
 		})
 		.catch(next);
 };
+
+exports.postCommentById = (req, res, next) => {
+	const { article_id } = req.params;
+	const comment = req.body;
+	insertCommentById(article_id, comment)
+		.then((newComment) => {
+			res.status(201).send({ comment: newComment[0] });
+		})
+		.catch(next);
+};
+
+//Promise.all(checkExists(article_id), insertCommentById(article_id, comment))
+//-if non-existent article_id, both will return different errors to the catch block
+
+//checkExists(article_id)
+//.then(() => {insertCommentById(article_id, comment)})
+//completely breaks everything
+
+//checkExists(article_id)
+//.then(insertCommentById(article_id, comment))
+// also breaks all tests
+
+//change the error handling in the app?
+//23502/23503 = 404 err?
