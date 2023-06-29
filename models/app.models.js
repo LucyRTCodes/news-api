@@ -32,6 +32,14 @@ exports.selectAllArticles = () => {
 		});
 };
 
+exports.selectAllUsers = () => {
+	return db
+		.query(`SELECT username, name, avatar_url FROM users;`)
+		.then(({ rows }) => {
+			return rows;
+		});
+};
+
 exports.selectArticleById = (id) => {
 	return db
 		.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
