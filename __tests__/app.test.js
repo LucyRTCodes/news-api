@@ -324,4 +324,14 @@ describe("PATCH	/api/articles/:article_id", () => {
 				expect(body.msg).toBe("Bad request");
 			});
 	});
+	test("404: return not found if provided non-existent article_id", () => {
+		const update = { inc_votes: 3 };
+		return request(app)
+			.patch("/api/articles/4000")
+			.send(update)
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
 });
