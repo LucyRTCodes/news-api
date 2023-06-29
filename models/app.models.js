@@ -1,15 +1,5 @@
 const db = require("../db/connection");
 
-exports.checkExists = (id) => {
-	return db
-		.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
-		.then(({ rows }) => {
-			if (!rows.length)
-				return Promise.reject({ status: 404, msg: "Not found" });
-			return rows;
-		});
-};
-
 exports.selectAllTopics = () => {
 	return db.query(`SELECT * FROM topics;`).then(({ rows }) => {
 		return rows;
@@ -79,4 +69,8 @@ exports.updateArticleById = (inc_votes, id) => {
 		.then(({ rows }) => {
 			return rows;
 		});
+};
+
+exports.removeCommentById = (id) => {
+	return db.query(`DELETE FROM comments WHERE comment_id = $1`, [id]);
 };

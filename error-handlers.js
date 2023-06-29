@@ -1,5 +1,6 @@
 exports.psqlError = (err, req, res, next) => {
 	if (err.code) {
+		console.log(err);
 		if (err.code === "23503") {
 			res.status(404).send({ msg: "Not found" });
 		}
