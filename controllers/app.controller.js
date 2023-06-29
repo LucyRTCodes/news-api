@@ -67,3 +67,6 @@ exports.postCommentById = (req, res, next) => {
 //checkExists(article_id)
 //.then(insertCommentById(article_id, comment))
 // also breaks all tests
+
+//change the error handling in the app?
+//23502/23503 = 404 err?

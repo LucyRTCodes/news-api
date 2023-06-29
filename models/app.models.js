@@ -54,6 +54,8 @@ exports.selectCommentsById = (id) => {
 
 exports.insertCommentById = (article_id, comment) => {
 	const { username, body } = comment;
+	if (typeof username !== "string" || typeof body !== "string")
+		return Promise.reject({ status: 400, msg: "Bad request" });
 	return db
 		.query(
 			`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`,
