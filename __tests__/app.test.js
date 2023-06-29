@@ -80,6 +80,34 @@ describe("GET /api/articles", () => {
 	});
 });
 
+describe("GET /api/users", () => {
+	test("200: should return all users", () => {
+		return request(app)
+			.get("/api/users")
+			.expect(200)
+			.then(({ body }) => {
+				const { users } = body;
+				expect(users).toBeInstanceOf(Array);
+				expect(users).toHaveLength(4);
+			});
+	});
+	test("200: should return all users with properties username, name, avatar_url", () => {
+		return request(app)
+			.get("/api/users")
+			.expect(200)
+			.then(({ body }) => {
+				const { users } = body;
+				users.forEach((user) => {
+					expect(user).toMatchObject({
+						username: expect.any(String),
+						name: expect.any(String),
+						avatar_url: expect.any(String),
+					});
+				});
+			});
+	});
+});
+
 describe("GET /api/articles/:article_id", () => {
 	test("200: should return article which article_id matches the article_id provided in the URL", () => {
 		return request(app)
