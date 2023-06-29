@@ -5,6 +5,7 @@ const {
 	selectArticleById,
 	selectCommentsById,
 	insertCommentById,
+	updateArticleById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 
@@ -53,6 +54,18 @@ exports.postCommentById = (req, res, next) => {
 	insertCommentById(article_id, comment)
 		.then((newComment) => {
 			res.status(201).send({ comment: newComment[0] });
+		})
+		.catch(next);
+};
+
+exports.patchArticleById = (req, res, next) => {
+	const id = req.params.article_id;
+	const { inc_votes } = req.body;
+	const promises = [checkExists(id), updateArticleById(inc_votes, id)];
+	Promise.all(promises)
+		.then((content) => {
+			const article = content[1][0];
+			res.status(200).send({ article });
 		})
 		.catch(next);
 };

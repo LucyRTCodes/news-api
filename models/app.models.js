@@ -31,6 +31,7 @@ exports.selectAllArticles = () => {
 			return rows;
 		});
 };
+
 exports.selectArticleById = (id) => {
 	return db
 		.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
@@ -60,6 +61,20 @@ exports.insertCommentById = (article_id, comment) => {
 		.query(
 			`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`,
 			[username, body, article_id]
+		)
+		.then(({ rows }) => {
+			return rows;
+		});
+};
+
+exports.updateArticleById = (inc_votes, id) => {
+	return db
+		.query(
+			`UPDATE articles
+				SET votes = votes + $1
+				WHERE article_id = $2
+				RETURNING *`,
+			[inc_votes, id]
 		)
 		.then(({ rows }) => {
 			return rows;
