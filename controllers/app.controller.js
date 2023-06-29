@@ -2,6 +2,7 @@ const {
 	checkExists,
 	selectAllTopics,
 	selectAllArticles,
+	selectAllUsers,
 	selectArticleById,
 	selectCommentsById,
 	insertCommentById,
@@ -27,6 +28,12 @@ exports.getAllArticles = (_, res, next) => {
 			res.status(200).send({ articles });
 		})
 		.catch(next);
+};
+
+exports.getAllUsers = (_, res, next) => {
+	selectAllUsers().then((users) => {
+		res.status(200).send({ users });
+	});
 };
 
 exports.getArticleById = (req, res, next) => {

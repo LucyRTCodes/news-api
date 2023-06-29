@@ -3,6 +3,7 @@ const {
 	getApiEndpoints,
 	getAllTopics,
 	getAllArticles,
+	getAllUsers,
 	getArticleById,
 	getCommentsById,
 	postCommentById,
@@ -18,6 +19,7 @@ app.get("/api/topics", getAllTopics);
 app.get("/api/articles", getAllArticles);
 app.get("/api/articles/:article_id", getArticleById);
 app.get("/api/articles/:article_id/comments", getCommentsById);
+app.get("/api/users", getAllUsers);
 app.post("/api/articles/:article_id/comments", postCommentById);
 app.patch("/api/articles/:article_id", patchArticleById);
 

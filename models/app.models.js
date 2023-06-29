@@ -32,6 +32,8 @@ exports.selectAllArticles = () => {
 		});
 };
 
+exports.selectAllUsers = () => {};
+
 exports.selectArticleById = (id) => {
 	return db
 		.query(`SELECT * FROM articles WHERE article_id = $1`, [id])
