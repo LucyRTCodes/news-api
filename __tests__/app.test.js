@@ -202,8 +202,16 @@ describe("GET /api/articles/:article_id", () => {
 					created_at: expect.any(String),
 					votes: expect.any(Number),
 					article_img_url: expect.any(String),
-					comment_count: expect.any(String),
 				});
+			});
+	});
+	test("200: should return article which article_id matches the article_id provided in the URL", () => {
+		return request(app)
+			.get("/api/articles/1")
+			.expect(200)
+			.then(({ body }) => {
+				const { article } = body;
+				expect(article.hasOwnProperty("comment_count")).toBe(true);
 			});
 	});
 	test("400: should return not found when provided article_id is not valid", () => {
@@ -274,6 +282,31 @@ describe("GET /api/articles/:article_id/comments", () => {
 	test("404: should return not found when provided article_id is valid but non-existent", () => {
 		return request(app)
 			.get("/api/articles/2000/comments")
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
+});
+
+describe("GET /api/users/:username", () => {
+	test("200: should return user whose username matches the username provided in the URL", () => {
+		return request(app)
+			.get("/api/users/butter_bridge")
+			.expect(200)
+			.then(({ body }) => {
+				const { user } = body;
+				expect(user).toMatchObject({
+					username: "butter_bridge",
+					name: "jonny",
+					avatar_url:
+						"https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+				});
+			});
+	});
+	test("404: should return not found when provided username is valid but non-existent", () => {
+		return request(app)
+			.get("/api/users/butter_ridge")
 			.expect(404)
 			.then(({ body }) => {
 				expect(body.msg).toBe("Not found");

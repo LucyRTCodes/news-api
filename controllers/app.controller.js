@@ -7,12 +7,14 @@ const {
 	insertCommentById,
 	updateArticleById,
 	removeCommentById,
+	selectUserByUsername,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 const {
 	checkArticles,
 	checkComments,
 	checkTopics,
+	checkUsers,
 } = require("../check-exists");
 
 exports.getApiEndpoints = (_, res) => {
@@ -63,6 +65,15 @@ exports.getCommentsById = (req, res, next) => {
 		.catch(next);
 };
 
+exports.getUserByUsername = (req, res, next) => {
+	const { username } = req.params;
+	selectUserByUsername(username)
+		.then((user) => {
+			res.status(200).send({ user: user[0] });
+		})
+		.catch(next);
+};
+
 exports.postCommentById = (req, res, next) => {
 	const { article_id } = req.params;
 	const comment = req.body;
@@ -77,12 +88,12 @@ exports.patchArticleById = (req, res, next) => {
 	const { article_id } = req.params;
 	const { inc_votes } = req.body;
 	const promises = [
-		checkArticles(article_id),
 		updateArticleById(inc_votes, article_id),
+		checkArticles(article_id),
 	];
 	Promise.all(promises)
 		.then((content) => {
-			const article = content[1][0];
+			const article = content[0][0];
 			res.status(200).send({ article });
 		})
 		.catch(next);
