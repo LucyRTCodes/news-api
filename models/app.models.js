@@ -1,3 +1,4 @@
+const { checkTopics } = require("../check-exists");
 const db = require("../db/connection");
 
 exports.selectAllTopics = () => {
@@ -25,7 +26,6 @@ exports.selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
 			ORDER BY ${sort_by} ${order};`;
 
 	return db.query(query, values).then(({ rows }) => {
-		if (!rows.length) return Promise.reject({ status: 404, msg: "Not found" });
 		return rows;
 	});
 };

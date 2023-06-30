@@ -78,7 +78,7 @@ describe("GET /api/articles", () => {
 				});
 			});
 	});
-	test("200: should return topics in ascending order if provided order query ascending", () => {
+	test("200: should return articles in ascending order if provided order query ascending", () => {
 		return request(app)
 			.get("/api/articles?order=asc")
 			.expect(200)
@@ -86,7 +86,7 @@ describe("GET /api/articles", () => {
 				expect(body.articles).toBeSortedBy("created_at", { descending: false });
 			});
 	});
-	test("200: should return topics sorted by votes if provided sort_by votes query", () => {
+	test("200: should return articles sorted by votes if provided sort_by votes query", () => {
 		return request(app)
 			.get("/api/articles?sort_by=votes")
 			.expect(200)
@@ -94,7 +94,7 @@ describe("GET /api/articles", () => {
 				expect(body.articles).toBeSortedBy("votes", { descending: true });
 			});
 	});
-	test("200: should return topics sorted by votes ascending if provided sort_by votes and order ascending queries", () => {
+	test("200: should return articles sorted by votes ascending if provided sort_by votes and order ascending queries", () => {
 		return request(app)
 			.get("/api/articles?sort_by=votes&order=asc")
 			.expect(200)
@@ -102,7 +102,7 @@ describe("GET /api/articles", () => {
 				expect(body.articles).toBeSortedBy("votes", { descending: false });
 			});
 	});
-	test("200: should return topics filtered by topic if provided topic query", () => {
+	test("200: should return articles filtered by topic if provided topic query", () => {
 		return request(app)
 			.get("/api/articles?topic=mitch")
 			.expect(200)
@@ -121,6 +121,15 @@ describe("GET /api/articles", () => {
 						comment_count: expect.any(String),
 					});
 				});
+			});
+	});
+	test("200: should return empty array if provided existing topic query with no associated articles", () => {
+		return request(app)
+			.get("/api/articles?topic=paper")
+			.expect(200)
+			.then(({ body }) => {
+				const { articles } = body;
+				expect(articles).toEqual([]);
 			});
 	});
 	test("400: should return bad request if passed invalid sort_by value", () => {

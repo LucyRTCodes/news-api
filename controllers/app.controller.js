@@ -9,7 +9,11 @@ const {
 	removeCommentById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
-const { checkArticles, checkComments } = require("../check-exists");
+const {
+	checkArticles,
+	checkComments,
+	checkTopics,
+} = require("../check-exists");
 
 exports.getApiEndpoints = (_, res) => {
 	res.status(200).send({ endpoints });
@@ -25,9 +29,11 @@ exports.getAllTopics = (_, res, next) => {
 
 exports.getAllArticles = (req, res, next) => {
 	const { sort_by, order, topic } = req.query;
-	selectAllArticles(sort_by, order, topic)
+	const promises = [selectAllArticles(sort_by, order, topic)];
+	if (topic) promises.push(checkTopics(topic));
+	Promise.all(promises)
 		.then((articles) => {
-			res.status(200).send({ articles });
+			res.status(200).send({ articles: articles[0] });
 		})
 		.catch(next);
 };
