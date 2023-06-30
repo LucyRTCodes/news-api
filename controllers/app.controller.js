@@ -104,13 +104,15 @@ exports.patchCommentById = (req, res, next) => {
 	const { comment_id } = req.params;
 	const { inc_votes } = req.body;
 	const promises = [
+		updateCommentById(inc_votes, comment_id),
 		checkComments(comment_id),
-		updateCommentById(comment_id, inc_votes),
 	];
-	Promise.all(promises).then((content) => {
-		const comment = content[0][0];
-		res.status(200).send({ comment });
-	});
+	Promise.all(promises)
+		.then((content) => {
+			const comment = content[0][0];
+			res.status(200).send({ comment });
+		})
+		.catch(next);
 };
 
 exports.deleteCommentById = (req, res, next) => {
