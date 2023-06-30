@@ -78,6 +78,75 @@ describe("GET /api/articles", () => {
 				});
 			});
 	});
+	test("200: should return topics in ascending order if provided order query ascending", () => {
+		return request(app)
+			.get("/api/articles?order=asc")
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy("created_at", { descending: false });
+			});
+	});
+	test("200: should return topics sorted by votes if provided sort_by votes query", () => {
+		return request(app)
+			.get("/api/articles?sort_by=votes")
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy("votes", { descending: true });
+			});
+	});
+	test("200: should return topics sorted by votes ascending if provided sort_by votes and order ascending queries", () => {
+		return request(app)
+			.get("/api/articles?sort_by=votes&order=asc")
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.articles).toBeSortedBy("votes", { descending: false });
+			});
+	});
+	test("200: should return topics filtered by topic if provided topic query", () => {
+		return request(app)
+			.get("/api/articles?topic=mitch")
+			.expect(200)
+			.then(({ body }) => {
+				const { articles } = body;
+				expect(articles).toHaveLength(12);
+				articles.forEach((article) => {
+					expect(article).toMatchObject({
+						author: expect.any(String),
+						title: expect.any(String),
+						article_id: expect.any(Number),
+						topic: "mitch",
+						created_at: expect.any(String),
+						votes: expect.any(Number),
+						article_img_url: expect.any(String),
+						comment_count: expect.any(String),
+					});
+				});
+			});
+	});
+	test("400: should return bad request if passed invalid sort_by value", () => {
+		return request(app)
+			.get("/api/articles?sort_by=carrots")
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("400: should return bad request if passed invalid order value", () => {
+		return request(app)
+			.get("/api/articles?order=carrots")
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("404: should return bad request if passed non-existent topic", () => {
+		return request(app)
+			.get("/api/articles?topic=bananas")
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
 });
 
 describe("GET /api/users", () => {
