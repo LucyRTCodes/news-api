@@ -1,5 +1,4 @@
 const {
-	checkExists,
 	selectAllTopics,
 	selectAllArticles,
 	selectAllUsers,
@@ -7,8 +6,10 @@ const {
 	selectCommentsById,
 	insertCommentById,
 	updateArticleById,
+	removeCommentById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
+const { checkArticles, checkComments } = require("../check-exists");
 
 exports.getApiEndpoints = (_, res) => {
 	res.status(200).send({ endpoints });
@@ -46,8 +47,8 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.getCommentsById = (req, res, next) => {
-	const id = req.params.article_id;
-	const promises = [selectCommentsById(id), checkExists(id)];
+	const { article_id } = req.params;
+	const promises = [selectCommentsById(article_id), checkArticles(article_id)];
 	Promise.all(promises)
 		.then((comments) => {
 			res.status(200).send({ comments: comments[0] });
@@ -66,13 +67,26 @@ exports.postCommentById = (req, res, next) => {
 };
 
 exports.patchArticleById = (req, res, next) => {
-	const id = req.params.article_id;
+	const { article_id } = req.params;
 	const { inc_votes } = req.body;
-	const promises = [checkExists(id), updateArticleById(inc_votes, id)];
+	const promises = [
+		checkArticles(article_id),
+		updateArticleById(inc_votes, article_id),
+	];
 	Promise.all(promises)
 		.then((content) => {
 			const article = content[1][0];
 			res.status(200).send({ article });
+		})
+		.catch(next);
+};
+
+exports.deleteCommentById = (req, res, next) => {
+	const { comment_id } = req.params;
+	const promises = [removeCommentById(comment_id), checkComments(comment_id)];
+	Promise.all(promises)
+		.then(() => {
+			res.status(204).send();
 		})
 		.catch(next);
 };

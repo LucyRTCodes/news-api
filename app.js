@@ -8,6 +8,7 @@ const {
 	getCommentsById,
 	postCommentById,
 	patchArticleById,
+	deleteCommentById,
 } = require("./controllers/app.controller");
 const { psqlError, customError, serverError } = require("./error-handlers");
 
@@ -22,6 +23,7 @@ app.get("/api/articles/:article_id/comments", getCommentsById);
 app.get("/api/users", getAllUsers);
 app.post("/api/articles/:article_id/comments", postCommentById);
 app.patch("/api/articles/:article_id", patchArticleById);
+app.delete("/api/comments/:comment_id", deleteCommentById);
 
 app.use(psqlError);
 app.use(customError);
