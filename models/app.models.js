@@ -1,4 +1,3 @@
-const { checkTopics } = require("../check-exists");
 const db = require("../db/connection");
 
 exports.selectAllTopics = () => {
@@ -85,6 +84,26 @@ exports.insertCommentById = (article_id, comment) => {
 			`INSERT INTO comments (author, body, article_id) VALUES ($1, $2, $3) RETURNING *;`,
 			[username, body, article_id]
 		)
+		.then(({ rows }) => {
+			return rows;
+		});
+};
+
+exports.insertArticle = (
+	author,
+	title,
+	body,
+	topic,
+	article_img_url = "https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700"
+) => {
+	return db
+		.query(
+			`INSERT INTO articles (author, title, body, topic, article_img_url)
+				VALUES ($1, $2, $3, $4, $5) 
+				RETURNING *`,
+			[author, title, body, topic, article_img_url]
+		)
+
 		.then(({ rows }) => {
 			return rows;
 		});

@@ -405,6 +405,82 @@ describe("POST /api/articles/:article_id/comments", () => {
 	});
 });
 
+describe("POST /api/articles", () => {
+	test("201: should add article", () => {
+		const newArticle = {
+			author: "rogersop",
+			title: "cool article",
+			body: "cool article body",
+			topic: "cats",
+			article_img_url:
+				"https://www.shutterstock.com/shutterstock/photos/1842198919/display_1500/stock-photo-funny-large-longhair-gray-kitten-with-beautiful-big-green-eyes-lying-on-white-table-lovely-fluffy-1842198919.jpg",
+		};
+		return request(app)
+			.post("/api/articles")
+			.send(newArticle)
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.article).toMatchObject({
+					article_id: expect.any(Number),
+					author: "rogersop",
+					title: "cool article",
+					body: "cool article body",
+					topic: "cats",
+					article_img_url:
+						"https://www.shutterstock.com/shutterstock/photos/1842198919/display_1500/stock-photo-funny-large-longhair-gray-kitten-with-beautiful-big-green-eyes-lying-on-white-table-lovely-fluffy-1842198919.jpg",
+				});
+			});
+	});
+	test("201: should default article_img_url if not provided", () => {
+		const newArticle = {
+			author: "rogersop",
+			title: "cool article",
+			body: "cool article body",
+			topic: "cats",
+		};
+		return request(app)
+			.post("/api/articles")
+			.send(newArticle)
+			.expect(201)
+			.then(({ body }) => {
+				expect(body.article).toMatchObject({
+					article_id: expect.any(Number),
+					author: "rogersop",
+					title: "cool article",
+					body: "cool article body",
+					topic: "cats",
+					article_img_url:
+						"https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700",
+				});
+			});
+	});
+	test("400: should return bad request when provided body is missing properties", () => {
+		const newArticle = { author: "rogersop" };
+		return request(app)
+			.post("/api/articles")
+			.send(newArticle)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("404: should return an error if passed non-existent username", () => {
+		const newArticle = {
+			author: "banana",
+			title: "cool article",
+			body: "cool article body",
+			topic: "cats",
+		};
+		return request(app)
+			.post("/api/articles")
+			.send(newArticle)
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
+});
+
 describe("PATCH	/api/articles/:article_id", () => {
 	test("200: updates votes on specific article by amount specified", () => {
 		const update = { inc_votes: 2 };
