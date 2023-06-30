@@ -426,6 +426,8 @@ describe("POST /api/articles", () => {
 					title: "cool article",
 					body: "cool article body",
 					topic: "cats",
+					votes: expect.any(Number),
+					created_at: expect.any(String),
 					article_img_url:
 						"https://www.shutterstock.com/shutterstock/photos/1842198919/display_1500/stock-photo-funny-large-longhair-gray-kitten-with-beautiful-big-green-eyes-lying-on-white-table-lovely-fluffy-1842198919.jpg",
 				});
@@ -449,6 +451,8 @@ describe("POST /api/articles", () => {
 					title: "cool article",
 					body: "cool article body",
 					topic: "cats",
+					votes: expect.any(Number),
+					created_at: expect.any(String),
 					article_img_url:
 						"https://images.pexels.com/photos/97050/pexels-photo-97050.jpeg?w=700&h=700",
 				});
