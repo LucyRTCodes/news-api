@@ -19,8 +19,8 @@ exports.checkComments = (comment_id) => {
 	return db
 		.query(
 			`SELECT * 
-			FROM articles 
-			WHERE article_id = $1`,
+			FROM comments 
+			WHERE comment_id = $1`,
 			[comment_id]
 		)
 		.then(({ rows }) => {

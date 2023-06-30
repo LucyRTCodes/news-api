@@ -9,6 +9,7 @@ const {
 	removeCommentById,
 	selectUserByUsername,
 	insertArticle,
+	updateCommentById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 const {
@@ -111,6 +112,21 @@ exports.patchArticleById = (req, res, next) => {
 		.then((content) => {
 			const article = content[0][0];
 			res.status(200).send({ article });
+		})
+		.catch(next);
+};
+
+exports.patchCommentById = (req, res, next) => {
+	const { comment_id } = req.params;
+	const { inc_votes } = req.body;
+	const promises = [
+		updateCommentById(inc_votes, comment_id),
+		checkComments(comment_id),
+	];
+	Promise.all(promises)
+		.then((content) => {
+			const comment = content[0][0];
+			res.status(200).send({ comment });
 		})
 		.catch(next);
 };

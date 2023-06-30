@@ -552,6 +552,56 @@ describe("PATCH	/api/articles/:article_id", () => {
 	});
 });
 
+describe("PATCH	/api/comments/:comment_id", () => {
+	test("200: updates votes on specific comment by amount specified", () => {
+		const update = { inc_votes: 2 };
+		return request(app)
+			.patch("/api/comments/1")
+			.send(update)
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.comment).toMatchObject({
+					comment_id: 1,
+					body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+					votes: 18,
+					author: "butter_bridge",
+					article_id: 9,
+					created_at: expect.any(String),
+				});
+			});
+	});
+	test("400: return bad request if provided vote increase is not a number", () => {
+		const update = { inc_votes: "3 more please" };
+		return request(app)
+			.patch("/api/comments/1")
+			.send(update)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("400: return bad request if provided invalid comment_id", () => {
+		const update = { inc_votes: 3 };
+		return request(app)
+			.patch("/api/comments/three")
+			.send(update)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("404: return not found if provided non-existent comment_id", () => {
+		const update = { inc_votes: 3 };
+		return request(app)
+			.patch("/api/comments/4000")
+			.send(update)
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
+});
+
 describe("DELETE /api/comments/:comment_id", () => {
 	test("204: should delete comment by specified comment_id", () => {
 		return request(app).delete("/api/comments/1").expect(204);
