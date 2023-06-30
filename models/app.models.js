@@ -1,3 +1,4 @@
+const { checkTopics } = require("../check-exists");
 const db = require("../db/connection");
 
 exports.selectAllTopics = () => {
@@ -6,20 +7,27 @@ exports.selectAllTopics = () => {
 	});
 };
 
-exports.selectAllArticles = () => {
-	return db
-		.query(
-			`SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id) AS comment_count
+exports.selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
+	const greenList = ["created_at", "votes", "desc", "asc"];
+	if (!greenList.includes(sort_by) || !greenList.includes(order))
+		return Promise.reject({ status: 400, msg: "Bad request" });
+	const values = [];
+	let query = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.article_id) AS comment_count
 			FROM articles
-			FULL JOIN comments ON comments.article_id = articles.article_id
+			FULL JOIN comments ON comments.article_id = articles.article_id `;
+
+	if (topic) {
+		query += `WHERE articles.topic = $1 `;
+		values.push(topic);
+	}
+
+	query += `
 			GROUP BY articles.article_id
-			ORDER BY articles.created_at DESC;`
-		)
-		.then(({ rows }) => {
-			if (!rows.length)
-				return Promise.reject({ status: 404, msg: "Not found" });
-			return rows;
-		});
+			ORDER BY ${sort_by} ${order};`;
+
+	return db.query(query, values).then(({ rows }) => {
+		return rows;
+	});
 };
 
 exports.selectAllUsers = () => {
