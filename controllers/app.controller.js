@@ -8,6 +8,7 @@ const {
 	updateArticleById,
 	removeCommentById,
 	selectUserByUsername,
+	insertArticle,
 	updateCommentById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
@@ -81,6 +82,21 @@ exports.postCommentById = (req, res, next) => {
 	insertCommentById(article_id, comment)
 		.then((newComment) => {
 			res.status(201).send({ comment: newComment[0] });
+		})
+		.catch(next);
+};
+
+exports.postArticle = (req, res, next) => {
+	const { author, title, body, topic, article_img_url } = req.body;
+	const promises = [
+		insertArticle(author, title, body, topic, article_img_url),
+		checkUsers(author),
+		checkTopics(topic),
+	];
+	Promise.all(promises)
+		.then((content) => {
+			const article = content[0][0];
+			res.status(201).send({ article });
 		})
 		.catch(next);
 };
