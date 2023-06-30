@@ -476,6 +476,77 @@ describe("PATCH	/api/articles/:article_id", () => {
 	});
 });
 
+describe("PATCH	/api/articles/:article_id", () => {
+	test("200: updates votes on specific article by amount specified", () => {
+		const update = { inc_votes: 2 };
+		return request(app)
+			.patch("/api/articles/1")
+			.send(update)
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.article).toMatchObject({
+					author: expect.any(String),
+					title: expect.any(String),
+					article_id: 1,
+					body: expect.any(String),
+					topic: expect.any(String),
+					created_at: expect.any(String),
+					votes: 102,
+					article_img_url: expect.any(String),
+				});
+			});
+	});
+	test("200: updates votes on specific article by amount specified", () => {
+		const update = { inc_votes: -1 };
+		return request(app)
+			.patch("/api/articles/1")
+			.send(update)
+			.expect(200)
+			.then(({ body }) => {
+				expect(body.article).toMatchObject({
+					author: expect.any(String),
+					title: expect.any(String),
+					article_id: 1,
+					body: expect.any(String),
+					topic: expect.any(String),
+					created_at: expect.any(String),
+					votes: 99,
+					article_img_url: expect.any(String),
+				});
+			});
+	});
+	test("400: return bad request if provided vote increase is not a number", () => {
+		const update = { inc_votes: "3 more please" };
+		return request(app)
+			.patch("/api/articles/1")
+			.send(update)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("400: return bad request if provided invalid article_id", () => {
+		const update = { inc_votes: 3 };
+		return request(app)
+			.patch("/api/articles/three")
+			.send(update)
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+	test("404: return not found if provided non-existent article_id", () => {
+		const update = { inc_votes: 3 };
+		return request(app)
+			.patch("/api/articles/4000")
+			.send(update)
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
+});
+
 describe("DELETE /api/comments/:comment_id", () => {
 	test("204: should delete comment by specified comment_id", () => {
 		return request(app).delete("/api/comments/1").expect(204);
