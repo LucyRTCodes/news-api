@@ -10,6 +10,7 @@ const {
 	selectUserByUsername,
 	insertArticle,
 	updateCommentById,
+	removeArticleById,
 } = require("../models/app.models");
 const endpoints = require("../endpoints.json");
 const {
@@ -133,8 +134,24 @@ exports.patchCommentById = (req, res, next) => {
 
 exports.deleteCommentById = (req, res, next) => {
 	const { comment_id } = req.params;
-	const promises = [removeCommentById(comment_id), checkComments(comment_id)];
-	Promise.all(promises)
+	checkComments(comment_id)
+		.then((comments) => {
+			const { comment_id } = comments[0];
+			removeCommentById(comment_id);
+		})
+		.then(() => {
+			res.status(204).send();
+		})
+		.catch(next);
+};
+
+exports.deleteArticleById = (req, res, next) => {
+	const { article_id } = req.params;
+	checkArticles(article_id)
+		.then((articles) => {
+			const { article_id } = articles[0];
+			removeArticleById(article_id);
+		})
 		.then(() => {
 			res.status(204).send();
 		})

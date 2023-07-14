@@ -12,6 +12,7 @@ const {
 	getUserByUsername,
 	postArticle,
 	patchCommentById,
+	deleteArticleById,
 } = require("./controllers/app.controller");
 const { psqlError, customError, serverError } = require("./error-handlers");
 
@@ -33,6 +34,7 @@ app.patch("/api/articles/:article_id", patchArticleById);
 app.patch("/api/comments/:comment_id", patchCommentById);
 
 app.delete("/api/comments/:comment_id", deleteCommentById);
+app.delete("/api/articles/:article_id", deleteArticleById);
 
 app.use(psqlError);
 app.use(customError);

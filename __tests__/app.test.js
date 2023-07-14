@@ -627,3 +627,25 @@ describe("DELETE /api/comments/:comment_id", () => {
 			});
 	});
 });
+
+describe("DELETE /api/articles/:article_id", () => {
+	test("204: should delete article by specified article_id", () => {
+		return request(app).delete("/api/articles/1").expect(204);
+	});
+	test("404: should return not found if article_id not found", () => {
+		return request(app)
+			.delete("/api/articles/10000")
+			.expect(404)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Not found");
+			});
+	});
+	test("400: should return bad request if article_id not valid", () => {
+		return request(app)
+			.delete("/api/articles/ten")
+			.expect(400)
+			.then(({ body }) => {
+				expect(body.msg).toBe("Bad request");
+			});
+	});
+});

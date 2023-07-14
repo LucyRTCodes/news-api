@@ -140,3 +140,7 @@ exports.updateCommentById = (inc_votes, id) => {
 exports.removeCommentById = (id) => {
 	return db.query(`DELETE FROM comments WHERE comment_id = $1`, [id]);
 };
+
+exports.removeArticleById = (id) => {
+	return db.query(`DELETE FROM articles WHERE article_id = $1`, [id]);
+};
