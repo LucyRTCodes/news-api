@@ -7,7 +7,7 @@ exports.selectAllTopics = () => {
 };
 
 exports.selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
-	const greenList = ["created_at", "votes", "desc", "asc"];
+	const greenList = ["created_at", "votes", "comment_count", "desc", "asc"];
 	if (!greenList.includes(sort_by) || !greenList.includes(order))
 		return Promise.reject({ status: 400, msg: "Bad request" });
 	const values = [];
