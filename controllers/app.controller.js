@@ -33,8 +33,8 @@ exports.getAllTopics = (_, res, next) => {
 };
 
 exports.getAllArticles = (req, res, next) => {
-	const { sort_by, order, topic } = req.query;
-	const promises = [selectAllArticles(sort_by, order, topic)];
+	const { sort_by, order, topic, author } = req.query;
+	const promises = [selectAllArticles(sort_by, order, topic, author)];
 	if (topic) promises.push(checkTopics(topic));
 	Promise.all(promises)
 		.then((articles) => {

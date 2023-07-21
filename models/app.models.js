@@ -6,7 +6,12 @@ exports.selectAllTopics = () => {
 	});
 };
 
-exports.selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
+exports.selectAllArticles = (
+	sort_by = "created_at",
+	order = "desc",
+	topic,
+	author
+) => {
 	const greenList = ["created_at", "votes", "comment_count", "desc", "asc"];
 	if (!greenList.includes(sort_by) || !greenList.includes(order))
 		return Promise.reject({ status: 400, msg: "Bad request" });
@@ -18,6 +23,11 @@ exports.selectAllArticles = (sort_by = "created_at", order = "desc", topic) => {
 	if (topic) {
 		query += `WHERE articles.topic = $1 `;
 		values.push(topic);
+	}
+
+	if (author) {
+		query += `WHERE articles.author = $1`;
+		values.push(author);
 	}
 
 	query += `
